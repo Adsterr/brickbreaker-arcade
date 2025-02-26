@@ -11,14 +11,19 @@ struct Brick {
 
 std::vector<Brick> CreateBricks(int rows, int cols, int brickWidth, int brickHeight, int spacing, int offsetY) {
     std::vector<Brick> bricks;
+    
+    // Total width of all bricks plus spacing between them
     int totalWidth = (cols * brickWidth) + (cols - 1) * spacing;
-    int startX = (224 * 3 - totalWidth) / 2;  // Center bricks horizontally
+    
+    // Calculate the starting X position to center the bricks
+    int startX = (((224 * 3) - totalWidth) / 2);
 
+    // Loop through the rows and columns to create each brick
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < cols; c++) {
             Brick brick;
-            brick.rect.x = startX + c * (brickWidth + spacing);
-            brick.rect.y = offsetY + r * (brickHeight + spacing);
+            brick.rect.x = startX + c * (brickWidth + spacing);  // Position brick horizontally
+            brick.rect.y = offsetY + r * (brickHeight + spacing);  // Position brick vertically
             brick.rect.w = brickWidth;
             brick.rect.h = brickHeight;
             brick.alive = true;

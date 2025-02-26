@@ -18,7 +18,7 @@ struct Ball {
         rect.y += static_cast<int>(speedY);
     }
 
-    void BounceOffWalls(int windowWidth, int windowHeight) {
+    void BounceOffWalls(int windowWidth) {
         // Bounce off left/right walls
         if (rect.x <= 0 || rect.x + rect.w >= windowWidth) {
             speedX = -speedX;
