@@ -5,3 +5,8 @@ make clean && make
 ./game
 
 :)
+
+
+
+
+let me end it all please
