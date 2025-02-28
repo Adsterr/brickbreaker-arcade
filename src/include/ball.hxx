@@ -16,7 +16,7 @@ struct Ball {
     void Move() {
         rect.x += static_cast<int>(speedX);
         rect.y += static_cast<int>(speedY);
-        speedX += 0.001; speedY += 0.001;
+        speedX += 0.0001; speedY += 0.0001;
     }
 
     void BounceOffWalls(int windowWidth) {
