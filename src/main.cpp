@@ -57,6 +57,7 @@ int main() {
 
 
     bool gameStarted = false;
+    bool game_over = false;
 
     while (running) {
         // ~~~~~~~~~~~~~~~~~~~~~~
@@ -116,12 +117,40 @@ int main() {
             score += hit ? 10 : 0;
 
             // Reset game if ball falls below screen
-            if (ball.rect.y >= WINDOW_HEIGHT) {
+            if (ball.rect.y >= WINDOW_HEIGHT && !game_over) {
+                game_over = true;
+            }
+
+            if (game_over) {
                 ball.Reset(WINDOW_WIDTH, WINDOW_HEIGHT);
                 score = 0;
                 ClearBricks(bricks);
-                bricks = CreateBricks(3, 12, 15, 20);
+            
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                SDL_RenderClear(renderer);
+            
+                DrawText(renderer, font, "GAME OVER...", WINDOW_WIDTH / 2 - 40, 150);
+                DrawText(renderer, font, "PRESS ENTER TO PLAY AGAIN", WINDOW_WIDTH / 2 - 40, 300);
+                DrawText(renderer, font, "ESC TO QUIT", WINDOW_WIDTH / 2 - 40, 350);
+            
+                SDL_RenderPresent(renderer); // Ensure the game over screen is displayed
+            
+                // Wait for user input before continuing
+                SDL_Event event;
+                while (SDL_WaitEvent(&event)) {
+                    if (event.type == SDL_KEYDOWN) {
+                        if (event.key.keysym.sym == SDLK_RETURN) {
+                            game_over = false;
+                            bricks = CreateBricks(3, 12, xSpacing, ySpacing);
+                            break;  // Exit loop and restart game
+                        } else if (event.key.keysym.sym == SDLK_ESCAPE) {
+                            running = false;
+                            break;
+                        }
+                    }
+                }
             }
+            
 
             // ~~~~~~~~~~~~~~~~~~~~~~
             // |  Layer Adding      |
@@ -129,7 +158,7 @@ int main() {
 
             // ~~~~~~~ Fix: Add Bricks Every 5 Secs ~~~~~~~
             int elapsed = time.GetElapsedTime();
-            if (elapsed - lastBrickSpawnTime >= 5) {
+            if (elapsed - lastBrickSpawnTime >= 30) {
                 ADD_BRICK_ROW_ON_NEW_THREAD(bricks);
                 AddBrickRow(bricks, 12, xSpacing, ySpacing);
                 lastBrickSpawnTime = elapsed;  // Update time
